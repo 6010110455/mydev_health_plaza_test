@@ -34,6 +34,46 @@ const longestCommonPrefixLodash = (strs: string[]): string => {
   ); // เริ่มต้นค่าด้วย strs[0]
 };
 
+class TrieNode {
+  children: Map<string, TrieNode>;
+  isEnd: boolean;
+
+  constructor() {
+    this.children = new Map();
+    this.isEnd = false;
+  }
+}
+
+class Trie {
+  root: TrieNode;
+
+  constructor() {
+    this.root = new TrieNode();
+  }
+
+  insert(word: string) {
+    let node = this.root;
+    for (let char of word) {
+      if (!node.children.has(char)) {
+        node.children.set(char, new TrieNode());
+      }
+      node = node.children.get(char)!;
+    }
+    node.isEnd = true;
+  }
+
+  longestCommonPrefix(): string {
+    let node = this.root;
+    let prefix = "";
+    while (node.children.size === 1 && !node.isEnd) {
+      const child = Array.from(node.children.entries())[0];
+      prefix += child[0];
+      node = child[1];
+    }
+    return prefix;
+  }
+}
+
 const LongestCommonPrefixComponent: React.FC = () => {
   const [inputStrings, setInputStrings] = useState<string[]>([
     "flower",
@@ -42,6 +82,7 @@ const LongestCommonPrefixComponent: React.FC = () => {
   ]);
   const [commonPrefix, setCommonPrefix] = useState<string>("");
   const [commonPrefixLodash, setCommonPrefixLodash] = useState<string>("");
+  const [commonPrefixTrie, setCommonPrefixTrie] = useState<string>("");
 
   const findCommonPrefix = () => {
     console.time("Custom Longest Common Prefix");
@@ -53,6 +94,15 @@ const LongestCommonPrefixComponent: React.FC = () => {
     const prefixLodash = longestCommonPrefixLodash(inputStrings);
     console.timeEnd("Lodash Longest Common Prefix");
     setCommonPrefixLodash(prefixLodash);
+
+    console.time("Trie Longest Common Prefix");
+    const trie = new Trie();
+    for (let str of inputStrings) {
+      trie.insert(str);
+    }
+    const prefixTrie = trie.longestCommonPrefix();
+    console.timeEnd("Trie Longest Common Prefix");
+    setCommonPrefixTrie(prefixTrie);
   };
 
   return (
