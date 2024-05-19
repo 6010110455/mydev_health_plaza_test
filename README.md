@@ -36,3 +36,15 @@ npm start
 
 - React: A JavaScript library for building user interfaces.
 - TypeScript: A typed superset of JavaScript that compiles to plain JavaScript.
+
+## Method Used (`./components/LongestCommonPrefixComponent`)
+
+1. longestCommonPrefix
+![Common Screenshot](screenshot2.png)
+
+2. longestCommonPrefix with lodash
+![Lodash Screenshot](screenshot3.png)
+
+3. longestCommonPrefix with Trie
+![Trie Screenshot](screenshot4.png)
+
